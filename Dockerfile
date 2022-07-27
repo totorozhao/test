@@ -1,21 +1,7 @@
-FROM node:6.10.3-slim
+FROM nginx
 
-# 安装nginx
-RUN apt-get update \
-    && apt-get install -y nginx
-
-# 指定工作目录
-WORKDIR /app
-
-# 将当前目录下的所有文件拷贝到工作目录下
-COPY . /app/
-
-# 声明运行时容器提供的服务端口
+LABEL name="test"
+LABEL version="1.0"
+COPY  ./dist/ /usr/share/nginx/html/
+COPY ./vue-front.conf /etc/nginx/conf.d/
 EXPOSE 80
-
-RUN   npm install \
-      && npm run build \
-      && cp -r dist/* /var/www/html \
-      && rm -rf /app
-
-CMD ["nginx","-g","daemon off;"]
